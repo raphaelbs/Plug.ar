@@ -1,0 +1,33 @@
+<div layout layout-padding layout-align="center center">
+
+	<div md-whiteframe="3" flex="30" ng-if="user">
+		<md-toolbar class="md-hue-2 md-accent">
+			<div class="md-toolbar-tools">
+				<h2 flex md-truncate>Últimas interações</h2>
+			</div>
+		</md-toolbar>
+
+		<md-content>
+			<md-list flex>
+				<md-subheader class="md-no-sticky">Últimas interações</md-subheader>
+				<md-list-item class="md-2-line" ng-repeat="user in users" ng-click="null">
+					<img ng-src="user.photoURL" class="md-avatar" alt="{{user.displayName}}" />
+					<div class="md-list-item-text" layout="column">
+						<h3 ng-bind="user.displayName"></h3>
+						<h4 ng-bind="user.action"></h4>
+						<p ng-bind="user.date | brDate"></p>
+					</div>
+				</md-list-item>
+			</md-list>
+		</md-content>
+	</div>
+
+	<div md-whiteframe="3" layout layout-align="center center" flex ng-if="user">
+		<md-icon class="material-icons" style="font-size: 48pt;" md-colors="{'color': light.color}">lightbulb_outline</md-icon>
+		<h3 ng-bind="light.caption"></h3>
+	</div>
+
+	<div md-whiteframe="3" layout layout-align="center center" flex ng-if="!user">
+		<h2>Faça login para descobrir</h2>
+	</div>
+</div>
