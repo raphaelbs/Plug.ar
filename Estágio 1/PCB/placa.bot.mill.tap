@@ -1,0 +1,32 @@
+(.../EAGLE-7.6.0/ulp/pcb-gcode.ulp)
+(Copyright 2005 - 2012 by John Johnson)
+(See readme.txt for licensing terms.)
+(This file generated from the board:)
+(.../Projetos/Estágio1/PCB/Plugar/placa.brd)
+(Current profile is .../EAGLE-7.6.0/ulp/profiles/generic.pp  )
+(This file generated 06/11/2016 12:27)
+(Settings from pcb-machine.h)
+(  Tool Size)
+(10.0000 )
+(Z Axis Settings)
+(  High     Up        Down     Drill)
+(500.0000 	100.0000 	-7.0000 	-32.0000 )
+(spindle on time = 3.0000)
+(milling depth = -10.0000)
+(text depth = -5.0000)
+(tool change at 500.0000 600.0000 1000.0000 )
+(feed rate xy = F20000.00 )
+(feed rate z  = F10000.00 )
+(Settings from pcb-defaults.h)
+(isolate min = 1.0000)
+(isolate max = 20.0000)
+(isolate step = 5.0000)
+(Generated bottom outlines, bottom drill, )
+(Unit of measure: mil)
+M02 (Please setup MIL_MODE in gcode-defaults.h)
+(Absolute Coordinates)
+G90
+M03
+G04 P3.000000
+M05
+M02
