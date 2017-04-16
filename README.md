@@ -36,6 +36,8 @@ O projeto conta com 3 etapas:
 
 # Sobre
 
-Raphael Brandão - raphael.b.souza@hotmail.com
-Estudante de Engenharia de Controle e Automação - Faculdade Pitágoras
-Gerente de Projetos e Full Stack Developer - Find Soluções Coorporativas LTDA
+Estudante de Engenharia de Controle e Automação - Faculdade Pitágoras.
+Gerente de Projetos e Full Stack Developer - Find Soluções Coorporativas LTDA.
+Divinópolis, Minas Gerais, Brasil.
+
+_raphael.b.souza@hotmail.com_
