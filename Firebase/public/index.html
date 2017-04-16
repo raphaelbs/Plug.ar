@@ -41,15 +41,16 @@
 
 </head>
 <body ng-app="app">
-	<div layout="column" ng-controller="app">
+	<div layout="column" ng-controller="app" ng-cloak>
 		<md-toolbar class="md-hue-2">
 			<div class="md-toolbar-tools">
 				<h2 flex md-truncate>rAlPha's light bulb</h2>
 
-				<md-button ng-click="session()" aria-label="Login">
-					<img ng-src="user.photoURL" class="md-avatar" />
-					<span ng-bind="user.displayName || 'Login'"></span>
-					<md-icon class="material-icons" nb-bind="user ? 'exit_to_app' : 'lock'"></md-icon>
+				<md-button ng-click="session()" aria-label="Session" layout layout-align="center center">
+					<img ng-src="{{user.photoURL}}" ng-show="user" style="height: 40px; border-radius: 20px;" />&nbsp;
+					<span>{{user.displayName || 'Login'}}</span>&nbsp;
+					<md-icon class="material-icons" ng-show="!loging">{{user ? 'exit_to_app' : 'lock'}}</md-icon>
+					<md-progress-circular ng-show="loging" class="md-accent" md-diameter="15"></md-progress-circular>
 				</md-button>
 			</div>
 		</md-toolbar>

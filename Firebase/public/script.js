@@ -18,32 +18,41 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', '$location
 		url: '/',
 		views : {
 			'main' : {
-				templateUrl : '/views/home',
-				controller : 'home'
+				templateUrl : '/views/home.html'
 			}
 		}
 	});
 }]);
 
-angular.module('app').controller('app', ['$scope', function($scope){
+angular.module('app').controller('app', ['$scope', '$timeout', function($scope, $timeout){
 	var gProvider = new firebase.auth.GoogleAuthProvider();
 
+	function error(err){
+		$timeout(function(){
+			console.error(err);
+			$scope.loging = false;
+		});
+	}
+
 	$scope.session = function(){
+		$scope.loging = true;
 		if($scope.user){
 			firebase.auth().signOut().then(function() {
-				delete $scope.user;
-			}, function(error) {
-				console.error(error);
-			});
+				$timeout(function(){
+					delete $scope.user;
+					$scope.loging = false;
+				});
+			}, error);
 			return;
 		}
 		firebase.auth().signInWithPopup(gProvider).then(function(result) {
 			var token = result.credential.accessToken;
-			$scope.user = result.user;
+			$timeout(function(){
+				$scope.user = result.user;
+				$scope.loging = false;
+			});
 			console.log(result);
-		}).catch(function(error) {
-			console.error(error);
-		});
+		}).catch(error);
 	};
 
 	$scope.color = { color: "'rgba(0,0,0,0;26)'", caption: 'carregando...'};
