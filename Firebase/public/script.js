@@ -26,6 +26,22 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', '$location
 
 angular.module('app').controller('app', ['$scope', '$timeout', function($scope, $timeout){
 	var gProvider = new firebase.auth.GoogleAuthProvider();
+	$scope.users = [];
+
+	var ledStatus = firebase.database().ref('LED');
+	ledStatus.on('value', function(v) {
+		$scope.light.update(v.val());
+	});
+	var usersStatus = firebase.database().ref('users');
+	usersStatus.on('child_added', function(v) {
+		$scope.users.push({
+			displayName: v.val().displayName,
+			photoURL: v.val().photoURL,
+			action: v.val().status,
+			date: v.val().date
+		});
+		$scope.light.update(v.val().status);
+	});
 
 	function error(err){
 		$timeout(function(){
@@ -43,18 +59,12 @@ angular.module('app').controller('app', ['$scope', '$timeout', function($scope, 
 		$scope.user = result.user;
 		$scope.loging = false;
 
-		var ledStatus = firebase.database().ref('LED');
-		ledStatus.on('value', function(v) {
-			console.log('oi: ', v.val());
-			$scope.light.update(v.val());
-		});
-
 		function changeLight(status){
 			firebase.database().ref('users').push({
 			    displayName: $scope.user.displayName,
 			    photoURL: $scope.user.photoURL,
 				action: status,
-				date: new Date().getTime()
+				date: firebase.database.ServerValue.TIMESTAMP
 		  	});
 		}
 		$scope.change = changeLight;
@@ -73,7 +83,6 @@ angular.module('app').controller('app', ['$scope', '$timeout', function($scope, 
 			$timeout(function(){
 				login(result);
 			}, 0);
-			console.log(result);
 		}).catch(error);
 	};
 
@@ -97,15 +106,10 @@ angular.module('app').controller('app', ['$scope', '$timeout', function($scope, 
 
 }]);
 
+//directive para atualizar a data
+angular.module('app').directive('relativeDate', ['$timeout', function($timeout) {
 
-/*global angular:true*/
-/**
- * [brDate]
- * Filtro para regularizar as datas no modo brasileiro.
- * Ex: {{123123 | brDate}} = 01/02/2017
- */
-angular.module('app').filter('brDate', function() {
-	function doDate(long){
+	function updateText(long){
 		var d = new Date(long);
 		if(typeof d == 'string') return '*data-invalida*';
 		var diff = new Date() - d;
@@ -119,10 +123,16 @@ angular.module('app').filter('brDate', function() {
 		o += d.getFullYear();
 		return o;
 	}
-	return function(input) {
-		if(input == undefined) return '*sem-data*';
-		if(input.match(/^\d+$/g)) return doDate(input);
-		if(input.match(/^\w{24,24}$/g)) return doDate(parseInt(input.substring(0, 8), 16)*1000);
-		return doDate(input);
+
+	function update(scope, element) {
+		element.text(updateText(scope.actualTime));
+		$timeout(function() { update(scope, element); }, 10000);
+	}
+
+	return {
+		scope: {
+			actualTime: '=relativeDate'
+		},
+		link: update
 	};
-});
+}]);
