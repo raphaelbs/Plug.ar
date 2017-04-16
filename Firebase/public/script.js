@@ -43,17 +43,21 @@ angular.module('app').controller('app', ['$scope', '$timeout', function($scope, 
 		$scope.user = result.user;
 		$scope.loging = false;
 
-		// Configura o banco de dados
-		/*var config = {
-			apiKey: '<your-api-key>',
-			authDomain: '<your-auth-domain>',
-			databaseURL: 'https://plugar-e4795.firebaseio.com/',
-			storageBucket: 'plugar-e4795'
-		};
-		firebase.initializeApp(config);*/
+		var ledStatus = firebase.database().ref('LED');
+		ledStatus.on('value', function(v) {
+			console.log('oi: ', v.val());
+			$scope.light.update(v.val());
+		});
 
-		// Inicializa o banco
-		var database = firebase.database();
+		function changeLight(status){
+			firebase.database().ref('users').push({
+			    displayName: $scope.user.displayName,
+			    photoURL: $scope.user.photoURL,
+				action: status,
+				date: new Date().getTime()
+		  	});
+		}
+		$scope.change = changeLight;
 	}
 
 	$scope.session = function(){
@@ -75,6 +79,12 @@ angular.module('app').controller('app', ['$scope', '$timeout', function($scope, 
 
 	$scope.light = { class: "loading", caption: 'carregando...', status: false,
  		change: function(){
+			if(this.class === "loading") return;
+			this.update();
+			$scope.change && $scope.change(this.status);
+		},
+		update: function(s){
+			if(s == undefined) s = this.status;
 			this.status = !this.status;
 			if(this.status) {
 				this.class = "on";
