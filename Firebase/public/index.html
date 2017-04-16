@@ -47,6 +47,10 @@
 			<div class="md-toolbar-tools">
 				<h2 flex md-truncate>rAlPha's light bulb</h2>
 
+				<md-switch ng-model="video" ng-show="user" aria-label="Video">
+					<h4>Video</h4>
+			  	</md-switch>
+
 				<md-button ng-click="session()" aria-label="Session" layout layout-align="center center">
 					<img ng-src="{{user.photoURL}}" ng-show="user" style="height: 40px; border-radius: 20px;" />&nbsp;
 					<span>{{user.displayName || 'Login'}}</span>&nbsp;

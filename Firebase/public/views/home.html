@@ -14,9 +14,10 @@
 		</md-list>
 	</md-content>
 
-	<div md-whiteframe="3" layout layout-margin layout-align="space-around center" flex ng-if="user">
+	<md-content md-whiteframe="3" layout layout-margin layout-align="center center" flex ng-if="user">
 		<img flex="none"
-			ng-if="video" src="http://177.179.198.123:8080/video" height="320" width="240"
+			alt="Se você está vendo essa mensagem, provavelmente a transmissão está offline"
+			ng-show="video" src="http://177.179.198.123:8080/video" height="320" width="240"
 			style="cursor: pointer;"
 			ng-click="light.change()">
 		<div layout="column" layout-align="center center" flex>
@@ -27,11 +28,8 @@
 				ng-class="light.class">lightbulb_outline</i>
 			<h3 ng-bind="light.caption"></h3>
 			<p>Toque para interagir</p>
-			<md-switch ng-model="video" aria-label="Video">
-				Video
-		  	</md-switch>
 		</div>
-	</div>
+	</md-content>
 
 	<div md-whiteframe="3" layout layout-align="center center" flex ng-if="!user">
 		<h2 ng-show="!loging">Faça login para descobrir</h2>
