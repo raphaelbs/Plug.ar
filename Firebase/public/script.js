@@ -28,20 +28,29 @@ angular.module('app').controller('app', ['$scope', '$timeout', function($scope, 
 	var gProvider = new firebase.auth.GoogleAuthProvider();
 	$scope.users = [];
 
-	var ledStatus = firebase.database().ref('LED');
-	ledStatus.on('value', function(v) {
-		$scope.light.update(v.val());
-	});
-	var usersStatus = firebase.database().ref('users');
-	usersStatus.on('child_added', function(v) {
-		$scope.users.push({
-			displayName: v.val().displayName,
-			photoURL: v.val().photoURL,
-			action: v.val().status,
-			date: v.val().date
-		});
-		$scope.light.update(v.val().status);
-	});
+	var firebaseEvents = {
+		assigned : false,
+		fns: function(){
+			if(this.assigned) return;
+			firebase.database().ref('users').on('child_added', function(v) {
+				$scope.users.push({
+					displayName: v.val().displayName,
+					photoURL: v.val().photoURL,
+					action: v.val().action,
+					date: v.val().date
+				});
+			});
+			firebase.database().ref('LED').on('value', function(v) {
+				$scope.light.update(v.val());
+			});
+			this.assigned = true;
+		}
+	};
+
+	// Verifica se está logado
+	if(localStorage.getItem('user')){
+		login(JSON.parse(localStorage.getItem('user')));
+	}
 
 	function error(err){
 		$timeout(function(){
@@ -53,11 +62,18 @@ angular.module('app').controller('app', ['$scope', '$timeout', function($scope, 
 	function logoff(){
 		delete $scope.user;
 		$scope.loging = false;
+		localStorage.removeItem('user');
 	}
 
 	function login(result){
-		$scope.user = result.user;
+		$scope.user = {
+			displayName: result.displayName,
+			photoURL: result.photoURL
+		};
+		localStorage.setItem('user', JSON.stringify($scope.user));
 		$scope.loging = false;
+
+		firebaseEvents.fns();
 
 		function changeLight(status){
 			firebase.database().ref('users').push({
@@ -66,6 +82,7 @@ angular.module('app').controller('app', ['$scope', '$timeout', function($scope, 
 				action: status,
 				date: firebase.database.ServerValue.TIMESTAMP
 		  	});
+			firebase.database().ref('LED').transaction(function(){ return status; })
 		}
 		$scope.change = changeLight;
 	}
@@ -81,7 +98,7 @@ angular.module('app').controller('app', ['$scope', '$timeout', function($scope, 
 		firebase.auth().signInWithPopup(gProvider).then(function(result) {
 			var token = result.credential.accessToken;
 			$timeout(function(){
-				login(result);
+				login(result.user);
 			}, 0);
 		}).catch(error);
 	};
@@ -89,19 +106,20 @@ angular.module('app').controller('app', ['$scope', '$timeout', function($scope, 
 	$scope.light = { class: "loading", caption: 'carregando...', status: false,
  		change: function(){
 			if(this.class === "loading") return;
-			this.update();
-			$scope.change && $scope.change(this.status);
+			$scope.change && $scope.change(!this.status);
 		},
 		update: function(s){
-			if(s == undefined) s = this.status;
-			this.status = !this.status;
-			if(this.status) {
-				this.class = "on";
-				this.caption = "Acesa!";
-			}else {
-				this.class = "off";
-				this.caption = "Apagada!";
-			}
+			var self = this;
+			self.status = s;
+			$timeout(function(){
+				if(self.status) {
+					self.class = "on";
+					self.caption = "Acesa!";
+				}else {
+					self.class = "off";
+					self.caption = "Apagada!";
+				}
+			},0);
 		}};
 
 }]);

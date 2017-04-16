@@ -1,13 +1,14 @@
+.light{
+	font-size: 120pt;
+	transition: linear 0.5s;
+}
 .light.on{
-	font-size: 48pt;
     color: rgb(255, 255, 0);
     text-shadow: 0px 0px 20px rgb(255, 255, 0);
 }
 .light.off{
-	font-size: 48pt;
     color: rgba(0, 0, 0, 0.87);
 }
 .light.loading{
-	font-size: 48pt;
     color: rgba(0, 0, 0, 0.27);
 }

@@ -1,27 +1,25 @@
 <div flex layout layout-margin layout-align="space-between">
 
-	<div md-whiteframe="3" flex="30" ng-if="user">
-		<md-content>
-			<md-list flex>
-				<md-subheader class="md-no-sticky">Últimas interações</md-subheader>
-				<md-list-item class="md-2-line" ng-repeat="user in users" ng-click="null">
-					<img ng-src="{{user.photoURL}}" class="md-avatar" alt="{{user.displayName}}" />
-					<div class="md-list-item-text" layout="column">
-						<h3 ng-bind="user.displayName"></h3>
-						<h4 ng-bind="user.action"></h4>
-						<p relative-date="user.date"></p>
-					</div>
-				</md-list-item>
-			</md-list>
-		</md-content>
-	</div>
+	<md-content md-whiteframe="3" flex="30" ng-if="user">
+		<md-list flex>
+			<md-subheader class="md-no-sticky">Últimas interações</md-subheader>
+			<md-list-item class="md-3-line" ng-repeat="user in users | orderBy:'-date'" ng-click="null">
+				<img ng-src="{{user.photoURL}}" class="md-avatar" alt="{{user.displayName}}" />
+				<div class="md-list-item-text" layout="column">
+					<h3 ng-bind="user.displayName"></h3>
+					<h4>{{user.action ? 'Ligou' : 'Desligou'}}</h4>
+					<p relative-date="user.date"></p>
+				</div>
+			</md-list-item>
+		</md-list>
+	</md-content>
 
-	<div md-whiteframe="3" layout="column" layout-align="center center" flex ng-if="user">
+	<div md-whiteframe="3" layout="column" layout-align="center center" flex ng-if="user" ng-click="light.change()">
 		<i
-			ng-click="light.change()"
 			class="material-icons light"
 			ng-class="light.class">lightbulb_outline</i>
 		<h3 ng-bind="light.caption"></h3>
+		<p>Toque para interagir</p>
 	</div>
 
 	<div md-whiteframe="3" layout layout-align="center center" flex ng-if="!user">
