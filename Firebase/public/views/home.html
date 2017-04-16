@@ -1,6 +1,6 @@
 <div flex layout-xs="column" layout-sm="column" layout-gt-sm layout-margin layout-align="space-between">
 
-	<md-content md-whiteframe="3" flex-xs="30" flex-gt-xs="30" flex="30" ng-if="user" layout>
+	<md-content md-whiteframe="3" flex-xs="30" flex-sm="30" flex-gt-sm="30" flex="30" ng-if="user" layout>
 		<md-list flex>
 			<md-subheader class="md-no-sticky">Últimas interações</md-subheader>
 			<md-list-item class="md-3-line" ng-repeat="user in users | orderBy:'-date'" ng-click="null">
@@ -14,12 +14,23 @@
 		</md-list>
 	</md-content>
 
-	<div md-whiteframe="3" layout="column" layout-align="center center" flex ng-if="user" ng-click="light.change()">
-		<i
-			class="material-icons light"
-			ng-class="light.class">lightbulb_outline</i>
-		<h3 ng-bind="light.caption"></h3>
-		<p>Toque para interagir</p>
+	<div md-whiteframe="3" layout layout-margin layout-align="space-around center" flex ng-if="user">
+		<img flex="none"
+			ng-if="video" src="http://177.179.198.123:8080/video" height="320" width="240"
+			style="cursor: pointer;"
+			ng-click="light.change()">
+		<div layout="column" layout-align="center center" flex>
+			<i
+				style="cursor: pointer;"
+				ng-click="light.change()"
+				class="material-icons light"
+				ng-class="light.class">lightbulb_outline</i>
+			<h3 ng-bind="light.caption"></h3>
+			<p>Toque para interagir</p>
+			<md-switch ng-model="video" aria-label="Video">
+				Video
+		  	</md-switch>
+		</div>
 	</div>
 
 	<div md-whiteframe="3" layout layout-align="center center" flex ng-if="!user">
