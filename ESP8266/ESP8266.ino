@@ -18,6 +18,12 @@ WiFinder wifinder(WIFIS);
 volatile bool led_status, alterado = false;
 volatile int fb_delay = 1000, prev_delay = 1000;
 
+StaticJsonBuffer<50> tsoBuffer;
+JsonObject& timeStampObject = tsoBuffer.createObject();
+
+StaticJsonBuffer<250> nodemcuBuffer;
+JsonObject& nodemcuObject = nodemcuBuffer.createObject();
+
 void setup() {
 	Serial.begin(115200);
   wifinder.setLed(LED_PIN);
@@ -26,6 +32,7 @@ void setup() {
 	Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
   Firebase.setString("localIp", wifinder.getLocalIp());
 	attachInterrupt(BTN_PIN, readBtn, FALLING);
+  initJSONs();
 }
 
 void loop() {
@@ -35,6 +42,14 @@ void loop() {
 	readDelayFirebase();
 
 	delay(fb_delay);
+}
+
+// Inicializa conteudo statico dos jsons
+void initJSONs(){
+  timeStampObject[".sv"] = "timestamp";
+  nodemcuObject["photoURL"] = "https://cknodemcu.files.wordpress.com/2015/10/nodemcu2.png?w=150";
+  nodemcuObject["displayName"] = "NodeMCU";
+  nodemcuObject["date"] = timeStampObject;
 }
 
 // Lê do firebase: LED
@@ -60,7 +75,8 @@ void readDelayFirebase(){
 // Atualiza do firebase: LED
 void updateFirebase(){
 	if(!alterado) return;
-	Firebase.setBool("LED", !led_status);
+  bool ls = !led_status;
+	Firebase.setBool("LED", ls);
 	Serial.print("Definindo LED no firebase: ");
 	Serial.println(!led_status);
 	if (Firebase.failed()) {
@@ -68,6 +84,8 @@ void updateFirebase(){
 		Serial.println(Firebase.error());
 		return;
 	}
+  nodemcuObject["action"] = ls;
+  Firebase.push("users", nodemcuObject);
 	alterado = false;
 	attachInterrupt(BTN_PIN, readBtn, FALLING);
 }
