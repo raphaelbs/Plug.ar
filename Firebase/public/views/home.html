@@ -1,6 +1,6 @@
-<div flex layout layout-margin layout-align="space-between">
+<div flex layout-xs="column" layout-sm="column" layout-gt-sm layout-margin layout-align="space-between">
 
-	<md-content md-whiteframe="3" flex="30" ng-if="user">
+	<md-content md-whiteframe="3" flex-xs="30" flex-gt-xs="30" flex="30" ng-if="user" layout>
 		<md-list flex>
 			<md-subheader class="md-no-sticky">Últimas interações</md-subheader>
 			<md-list-item class="md-3-line" ng-repeat="user in users | orderBy:'-date'" ng-click="null">
