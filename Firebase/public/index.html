@@ -37,11 +37,12 @@
 	<!-- CDN::Titillium -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web:400">
 
+	<link rel="stylesheet" href="/style.css">
 	<script defer src="/script.js"></script>
 
 </head>
 <body ng-app="app">
-	<div layout="column" ng-controller="app" ng-cloak>
+	<div layout="column" layout-fill ng-controller="app" ng-cloak>
 		<md-toolbar class="md-hue-2">
 			<div class="md-toolbar-tools">
 				<h2 flex md-truncate>rAlPha's light bulb</h2>
@@ -54,7 +55,7 @@
 				</md-button>
 			</div>
 		</md-toolbar>
-		<div view="main"></div>
+		<div ui-view="main" layout="column" flex></div>
 	</div>
 </body>
 </html>

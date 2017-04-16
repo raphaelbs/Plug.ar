@@ -1,13 +1,6 @@
-<div layout layout-padding layout-align="center center">
-	user: {{user}}
+<div flex layout layout-margin layout-align="space-between">
 
 	<div md-whiteframe="3" flex="30" ng-if="user">
-		<md-toolbar class="md-hue-2 md-accent">
-			<div class="md-toolbar-tools">
-				<h2 flex md-truncate>Últimas interações</h2>
-			</div>
-		</md-toolbar>
-
 		<md-content>
 			<md-list flex>
 				<md-subheader class="md-no-sticky">Últimas interações</md-subheader>
@@ -23,12 +16,16 @@
 		</md-content>
 	</div>
 
-	<div md-whiteframe="3" layout layout-align="center center" flex ng-if="user">
-		<md-icon class="material-icons" style="font-size: 48pt;" md-colors="{'color': light.color}">lightbulb_outline</md-icon>
+	<div md-whiteframe="3" layout="column" layout-align="center center" flex ng-if="user">
+		<i
+			ng-click="light.change()"
+			class="material-icons light"
+			ng-class="light.class">lightbulb_outline</i>
 		<h3 ng-bind="light.caption"></h3>
 	</div>
 
 	<div md-whiteframe="3" layout layout-align="center center" flex ng-if="!user">
-		<h2>Faça login para descobrir</h2>
+		<h2 ng-show="!loging">Faça login para descobrir</h2>
+		<h2 ng-show="loging">Entrando...</h2>
 	</div>
 </div>

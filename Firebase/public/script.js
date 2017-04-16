@@ -34,28 +34,56 @@ angular.module('app').controller('app', ['$scope', '$timeout', function($scope, 
 		});
 	}
 
+	function logoff(){
+		delete $scope.user;
+		$scope.loging = false;
+	}
+
+	function login(result){
+		$scope.user = result.user;
+		$scope.loging = false;
+
+		// Configura o banco de dados
+		/*var config = {
+			apiKey: '<your-api-key>',
+			authDomain: '<your-auth-domain>',
+			databaseURL: 'https://plugar-e4795.firebaseio.com/',
+			storageBucket: 'plugar-e4795'
+		};
+		firebase.initializeApp(config);*/
+
+		// Inicializa o banco
+		var database = firebase.database();
+	}
+
 	$scope.session = function(){
 		$scope.loging = true;
 		if($scope.user){
 			firebase.auth().signOut().then(function() {
-				$timeout(function(){
-					delete $scope.user;
-					$scope.loging = false;
-				});
+				$timeout(logoff, 0);
 			}, error);
 			return;
 		}
 		firebase.auth().signInWithPopup(gProvider).then(function(result) {
 			var token = result.credential.accessToken;
 			$timeout(function(){
-				$scope.user = result.user;
-				$scope.loging = false;
-			});
+				login(result);
+			}, 0);
 			console.log(result);
 		}).catch(error);
 	};
 
-	$scope.color = { color: "'rgba(0,0,0,0;26)'", caption: 'carregando...'};
+	$scope.light = { class: "loading", caption: 'carregando...', status: false,
+ 		change: function(){
+			this.status = !this.status;
+			if(this.status) {
+				this.class = "on";
+				this.caption = "Acesa!";
+			}else {
+				this.class = "off";
+				this.caption = "Apagada!";
+			}
+		}};
 
 }]);
 
