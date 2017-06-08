@@ -31,7 +31,7 @@ _Modularização do Plug.ar_
 
 O projeto conta com 3 etapas:
 * [x] 2/2016 [**Estágio 1**](./Estágio%201) estruturação física do projeto com CAD e impressão 3D
-* [ ] 1/2017 **Estágio 2** prototipagem eletrônica e interligação com o projeto físico
+* [x] 1/2017 [**Estágio 2**](./Estágio%202) prototipagem eletrônica e interligação com o projeto físico
 * [ ] 2/2017 **TCC** desenvolvimento do firmware, cliente web e mobile
 
 # Sobre
